@@ -1,5 +1,6 @@
 const { mongoose } = require("mongoose");
 
+let instance = null;
 class Database {
   constructor() {
     if (!instance) {
@@ -11,8 +12,17 @@ class Database {
   }
 
   async connect(options) {
-    let db = await mongoose.connect(options.CONNECTION_STRING);
-    this.mongoConnection = db;
+    try {
+      console.log("DB Connecting...");
+
+      let db = await mongoose.connect(options.CONNECTION_STRING);
+      this.mongoConnection = db;
+
+      console.log("DB connected.");
+    } catch (err) {
+      console.error(err);
+      process.exit(1);
+    }
   }
 }
 
