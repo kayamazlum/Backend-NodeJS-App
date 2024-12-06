@@ -13,3 +13,4 @@ for (let route of routes) {
 }
 
 module.exports = router;
+//dinamik root yapısı
