@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  console.log("Bu bir middleware denemesidir.....");
+  console.log("Bu bir middleware dir.....");
   next();
 });
 
