@@ -72,4 +72,67 @@ router.post("/add", async (req, res) => {
   }
 });
 
+router.post("/update", async (req, res) => {
+  try {
+    let body = req.body;
+    let updates = {};
+
+    if (!body._id) {
+      throw new CustomError(
+        Enum.HTTP_CODES.BAD_REQUEST,
+        "Validation Error!",
+        "_id field must be filled"
+      );
+    }
+
+    if (body.password && body.password.length < Enum.PASS_LENGTH) {
+      updates.password = bcrypt.hashSync(
+        body.password,
+        bcrypt.genSaltSync(8),
+        null
+      );
+    }
+    if (typeof body.is_active === "boolean") {
+      updates.is_active = body.is_active;
+    }
+    if (body.first_name) {
+      updates.first_name = body.first_name;
+    }
+    if (body.last_name) {
+      updates.last_name = body.last_name;
+    }
+    if (body.phone_number) {
+      updates.phone_number = body.phone_number;
+    }
+
+    await Users.updateOne({ _id: body._id }, updates);
+
+    res.json(Response.successResponse({ success: true }));
+  } catch (err) {
+    let errorResponse = Response.errorResponse(err);
+    res.status(errorResponse.code).json(errorResponse);
+  }
+});
+
+router.post("/delete", async (req, res) => {
+  try {
+    let body = req.body;
+
+    if (!body._id) {
+      throw new CustomError(
+        Enum.HTTP_CODES.BAD_REQUEST,
+        "Validation Error!",
+        "_id field must be filled"
+      );
+    }
+
+    await Users.deleteOne({ _id: body._id });
+
+    res.json(Response.successResponse({ success: true }));
+  } catch (err) {
+    let errorResponse = Response.errorResponse(err);
+    res.status(errorResponse.code).json(errorResponse);
+  }
+});
+
 module.exports = router;
