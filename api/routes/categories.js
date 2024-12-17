@@ -7,7 +7,7 @@ const Enum = require("../config/Enum");
 const AuditLogs = require("../lib/AuditLogs");
 const logger = require("../lib/logger/LogerClass");
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     let categories = await Categories.find({});
     res.json(Response.successResponse(categories));
